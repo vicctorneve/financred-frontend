@@ -1,40 +1,45 @@
 import { useEffect, useRef } from 'react';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client/dist/sockjs';
-import { api } from '@/services/api';
 import { useAuth } from '@/contexts/AuthContext';
 
-const useEmprestimoStatus = (idCliente: string, onStatusUpdate: (status: string) => void) => {
+type StatusUpdate = { id: string; status: string };
+
+const useEmprestimoStatus = (
+  idCliente: string,
+  onStatusUpdate: (status: StatusUpdate) => void
+) => {
   const clientRef = useRef<Client | null>(null);
   const { user } = useAuth();
 
   useEffect(() => {
-    const socket = new SockJS(`http://localhost:8080/api/v1/ws?token=${user.token}`); 
+    const socket = new SockJS(`http://localhost:8080/api/v1/ws?token=${user.token}`);
+    
     const client = new Client({
-      webSocketFactory: () => socket, 
-      reconnectDelay: 5000, // tenta reconectar automaticamente
+      webSocketFactory: () => socket,
+      reconnectDelay: 5000,
       onConnect: () => {
-        console.log('Connected'); 
+        console.log('✅ Conectado ao WebSocket');
 
         client.subscribe(`/topic/status-emprestimo/${idCliente}`, (message) => {
-          const body = JSON.parse(message.body);
-          console.log('Status recebido:', body); 
+          const body: StatusUpdate = JSON.parse(message.body);
+          console.log('📥 Status recebido:', body);
           onStatusUpdate(body);
         });
       }, 
       onStompError: (frame) => {
-        console.error('Erro STOMP:', frame.headers['message']);
+        console.error('❌ Erro STOMP:', frame.headers['message']);
       },
     });
-
+    
     client.activate();
     clientRef.current = client;
 
     return () => {
       client.deactivate();
-      console.log('Desconectado do WebSocket');
+      console.log('🔌 Desconectado do WebSocket');
     };
-  }, [idCliente, onStatusUpdate]);
+  }, [idCliente, onStatusUpdate, user.token]);
 };
 
 export default useEmprestimoStatus;

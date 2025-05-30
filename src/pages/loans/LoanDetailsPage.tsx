@@ -57,23 +57,34 @@ const LoanDetailsPage = () => {
   }
 
   const pagarEmprestimo = async () =>{
-    console.log(filteredLoans)
-    const response = await api.post(
-      `/emprestimos/quitar`,
-      {
-      "idEmprestimo": id
-      },
-      { 
-        headers: { 
-          Authorization: `Bearer ${user.token}`  
-        }   
-      } 
-    );   
+    try {
+      const response = await api.post(
+        `/emprestimos/quitar`,
+        {
+        "idEmprestimo": id
+        },
+        { 
+          headers: { 
+            Authorization: `Bearer ${user.token}`  
+          }   
+        } 
+      );
 
+      await refetch();
 
-    await refetch();
-
-    toast.success('Empréstimo quitado com sucesso')
+      toast.success('Empréstimo quitado com sucesso')
+    } catch (error) {
+      if (error.response) {
+        toast.error(error.response.data ,{
+          duration: 3000,
+        })
+      } else if (error.request) {
+        console.error('Sem resposta do servidor:', error.request);
+      } else {
+        console.error('Erro ao configurar a requisição:', error.message);
+      }
+    }
+    
   }
 
   const normalizarData = (data: string): string => {
@@ -82,33 +93,46 @@ const LoanDetailsPage = () => {
   };
 
   const pagarParcela = async (event: React.MouseEvent<HTMLParagraphElement>) =>{   
-    const dataVencimento = event.currentTarget.getAttribute("data-id");
-    const dataFormatada = normalizarData(dataVencimento);
+    try {
 
-    const parcela = filteredLoans.filter((dadosParcela: Parcela) => {
-      return dadosParcela?.dataVencimento === dataFormatada;
-    });
-
-    if ( parcela[0].statusParcela == "PAGA"){
-      toast.error(`Parcela da data vencimento: ${dataVencimento}, já está paga!`)
-      return
+      const dataVencimento = event.currentTarget.getAttribute("data-id");
+      const dataFormatada = normalizarData(dataVencimento);
+  
+      const parcela = filteredLoans.filter((dadosParcela: Parcela) => {
+        return dadosParcela?.dataVencimento === dataFormatada;
+      });
+  
+      if ( parcela[0].statusParcela == "PAGA"){
+        toast.error(`Parcela da data vencimento: ${dataVencimento}, já está paga!`)
+        return
+      }
+      const response = await api.post(
+        `/emprestimos/parcelas/quitar`,
+        {
+        "dataVencimento": dataVencimento,
+        "idEmprestimo": id
+        },
+        { 
+          headers: { 
+            Authorization: `Bearer ${user.token}`  
+          }   
+        } 
+      );   
+  
+      await refetch();
+  
+      toast.success(`Parcela da data vencimento ${dataVencimento} paga!`)
+    } catch (error) {
+      if (error.response) {
+        toast.error(error.response.data ,{
+          duration: 3000,
+        })
+      } else if (error.request) {
+        console.error('Sem resposta do servidor:', error.request);
+      } else {
+        console.error('Erro ao configurar a requisição:', error.message);
+      }
     }
-    const response = await api.post(
-      `/emprestimos/parcelas/quitar`,
-      {
-      "dataVencimento": dataVencimento,
-      "idEmprestimo": id
-      },
-      { 
-        headers: { 
-          Authorization: `Bearer ${user.token}`  
-        }   
-      } 
-    );   
-
-    await refetch();
-
-    toast.success(`Parcela da data vencimento ${dataVencimento} paga!`)
   }
 
   return (

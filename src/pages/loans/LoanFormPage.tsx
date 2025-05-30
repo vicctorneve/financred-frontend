@@ -93,7 +93,6 @@ const LoanFormPage = () => {
       const response = await api.post(`/emprestimos`, data, { 
         headers: { Authorization: `Bearer ${user.token}` }
       });
-      console.log(response)
       if (response.status == 201) {
         toast.success("Empréstimo criado com sucesso!");
         navigate('/emprestimos');

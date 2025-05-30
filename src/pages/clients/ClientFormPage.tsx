@@ -103,7 +103,6 @@ const ClientFormPage = () => {
       ); 
     const data = response.data;
 
-    console.log(data) 
     
     form.reset({
       nomeCompleto: data.nomeCompleto,
@@ -179,7 +178,6 @@ const ClientFormPage = () => {
   });
   
   const onSubmit = (values: FormValues) => {
-    console.log('editar')
     if (isEditing) {
       updateMutation.mutate(values);
     } else {

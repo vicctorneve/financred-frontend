@@ -1,4 +1,4 @@
-
+import { Sidebar } from '../components/layout/Sidebar';
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@/services/api';
@@ -89,7 +89,6 @@ const Dashboard = () => {
       );
       
       const emprestimos = emprestimosResponse.data;
-      console.log(emprestimos)
        
       const parcelas = emprestimos.flatMap(emprestimo => emprestimo.parcelas);
       
@@ -97,7 +96,6 @@ const Dashboard = () => {
     },
     enabled: user?.role === 'ROLE_CLIENTE'
   });
-
   const renderContent = () => {
     if (user?.role === 'ROLE_CLIENTE') {
       if (isLoadingClient) {
@@ -134,151 +132,153 @@ const Dashboard = () => {
         : null;
       
       return (
-        <>
-          <div className="grid gap-4 md:grid-cols-2 mb-6">
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle>Bem-vindo, {client.nomeCompleto}!</CardTitle>
-                <CardDescription>
-                  Resumo da sua conta
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-sm text-muted-foreground">Empréstimos Ativos</p>
-                    <p className="text-2xl font-bold">{emprestimosAtivos.length}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Empréstimos Quitados</p>
-                    <p className="text-2xl font-bold">{emprestimosQuitados.length}</p>
-                  </div>
-                </div>
-                
-                {/* {lateemprestimos.length > 0 && (
-                  <div className="bg-red-50 p-3 rounded-md flex items-center">
-                    <div className="h-10 w-10 rounded-full bg-red-100 flex items-center justify-center mr-3">
-                      <AlertTriangle className="h-5 w-5 text-red-600" />
+        <div className="">
+          <div>
+            <div className="grid gap-4 md:grid-cols-2 mb-6">
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle>Bem-vindo, {client.nomeCompleto}!</CardTitle>
+                  <CardDescription>
+                    Resumo da sua conta
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-sm text-muted-foreground">Empréstimos Ativos</p>
+                      <p className="text-2xl font-bold">{emprestimosAtivos.length}</p>
                     </div>
                     <div>
-                      <p className="font-medium text-red-800">
-                        Você tem {lateemprestimos.length} empréstimo{lateemprestimos.length > 1 ? 's' : ''} em atraso
-                      </p>
-                      <p className="text-sm text-red-700">
-                        É importante regularizar sua situação o quanto antes.
-                      </p>
+                      <p className="text-sm text-muted-foreground">Empréstimos Quitados</p>
+                      <p className="text-2xl font-bold">{emprestimosQuitados.length}</p>
                     </div>
                   </div>
-                )} */}
-                
-                <div className="flex space-x-3">
-                  <Button asChild>
-                    <Link to="/emprestimos">Ver Meus Empréstimos</Link>
-                  </Button>
-                  {/* <Button asChild variant="outline">
-                    <Link to={`/emprestimo/${emprestimos.id}`}>Ver Parcelas</Link>
-                  </Button> */}
-                </div>
-              </CardContent>
-            </Card>
+                  
+                  {/* {lateemprestimos.length > 0 && (
+                    <div className="bg-red-50 p-3 rounded-md flex items-center">
+                      <div className="h-10 w-10 rounded-full bg-red-100 flex items-center justify-center mr-3">
+                        <AlertTriangle className="h-5 w-5 text-red-600" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-red-800">
+                          Você tem {lateemprestimos.length} empréstimo{lateemprestimos.length > 1 ? 's' : ''} em atraso
+                        </p>
+                        <p className="text-sm text-red-700">
+                          É importante regularizar sua situação o quanto antes.
+                        </p>
+                      </div>
+                    </div>
+                  )} */}
+                  
+                  <div className="flex space-x-3">
+                    <Button asChild>
+                      <Link to="/emprestimos">Ver Meus Empréstimos</Link>
+                    </Button>
+                    {/* <Button asChild variant="outline">
+                      <Link to={`/emprestimo/${emprestimos.id}`}>Ver Parcelas</Link>
+                    </Button> */}
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle>Próximo Pagamento</CardTitle>
+                  <CardDescription>
+                    {proximaParcela 
+                      ? `Vencimento em ${new Date(proximaParcela.dataVencimento).toLocaleDateString('pt-BR')}`
+                      : 'Não há pagamentos pendentes'}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {proximaParcela ? (
+                    <>
+                      <p className="text-3xl font-bold mb-2">
+                        {formatCurrency(proximaParcela.valorParcela)}
+                      </p>
+                      
+                      <div className="mt-4">
+                        <p className="text-sm font-medium mb-1">
+                          Dias até o vencimento:
+                        </p>
+                        <p className="font-bold text-lg">
+                          {Math.max(0, Math.floor((new Date(proximaParcela.dataVencimento).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)))} dias
+                        </p>
+                      </div>
+                      
+                      <Button className="mt-4" variant="outline" asChild>
+                        <Link to="/pagamentos">Ver Todos os Pagamentos</Link>
+                      </Button>
+                    </>
+                  ) : (
+                    <div className="flex flex-col items-center justify-center py-8">
+                      <CheckCircle className="h-16 w-16 text-green-500 mb-4" />
+                      <p className="text-xl font-medium text-center">
+                        Você não possui pagamentos pendentes!
+                      </p>
+                      <p className="text-sm text-muted-foreground text-center mt-1">
+                        Todos os seus pagamentos estão em dia.
+                      </p>
+                      
+                      <Button className="mt-6" variant="outline" asChild>
+                        <Link to="/emprestimos/novo">Solicitar Novo Empréstimo</Link>
+                      </Button>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
             
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle>Próximo Pagamento</CardTitle>
-                <CardDescription>
-                  {proximaParcela 
-                    ? `Vencimento em ${new Date(proximaParcela.dataVencimento).toLocaleDateString('pt-BR')}`
-                    : 'Não há pagamentos pendentes'}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {proximaParcela ? (
-                  <>
-                    <p className="text-3xl font-bold mb-2">
-                      {formatCurrency(proximaParcela.valorParcela)}
-                    </p>
-                    
-                    <div className="mt-4">
-                      <p className="text-sm font-medium mb-1">
-                        Dias até o vencimento:
-                      </p>
-                      <p className="font-bold text-lg">
-                        {Math.max(0, Math.floor((new Date(proximaParcela.dataVencimento).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)))} dias
-                      </p>
-                    </div>
-                    
-                    <Button className="mt-4" variant="outline" asChild>
-                      <Link to="/pagamentos">Ver Todos os Pagamentos</Link>
-                    </Button>
-                  </>
-                ) : (
-                  <div className="flex flex-col items-center justify-center py-8">
-                    <CheckCircle className="h-16 w-16 text-green-500 mb-4" />
-                    <p className="text-xl font-medium text-center">
-                      Você não possui pagamentos pendentes!
-                    </p>
-                    <p className="text-sm text-muted-foreground text-center mt-1">
-                      Todos os seus pagamentos estão em dia.
-                    </p>
-                    
-                    <Button className="mt-6" variant="outline" asChild>
-                      <Link to="/emprestimo/simulacao">Simular Novo Empréstimo</Link>
-                    </Button>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </div>
-          
-          {parcelasAtrasadas.length > 0 && (
-            <Card className="mb-6">
-              <CardHeader className="pb-2 text-red-600">
-                <CardTitle>Pagamentos em Atraso</CardTitle>
-                <CardDescription>
-                  Você tem {parcelasAtrasadas.length} pagamento{parcelasAtrasadas.length > 1 ? 's' : ''} em atraso
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="border rounded-md overflow-hidden">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Parcela</TableHead>
-                        <TableHead>Vencimento</TableHead>
-                        <TableHead>Valor</TableHead>
-                        <TableHead>Multa</TableHead>
-                        <TableHead>Total</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {parcelasAtrasadas.map(parcela => (
-                        <TableRow key={parcela.id}>
-                          <TableCell>{parcela.numeroParcela}</TableCell>
-                          <TableCell>
-                            {new Date(parcela.dataVencimento).toLocaleDateString('pt-BR')}
-                          </TableCell>
-                          <TableCell>{formatCurrency(parcela.valorParcela)}</TableCell>
-                          <TableCell>
-                            {parcela.lateFee 
-                              ? formatCurrency(parcela.multa)
-                              : '-'}
-                          </TableCell>
-                          <TableCell className="font-medium">
-                            {formatCurrency((parcela.valorParcela + (parcela.multa || 0)))}
-                          </TableCell>
+            {parcelasAtrasadas.length > 0 && (
+              <Card className="mb-6">
+                <CardHeader className="pb-2 text-red-600">
+                  <CardTitle>Pagamentos em Atraso</CardTitle>
+                  <CardDescription>
+                    Você tem {parcelasAtrasadas.length} pagamento{parcelasAtrasadas.length > 1 ? 's' : ''} em atraso
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="border rounded-md overflow-hidden">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Parcela</TableHead>
+                          <TableHead>Vencimento</TableHead>
+                          <TableHead>Valor</TableHead>
+                          <TableHead>Multa</TableHead>
+                          <TableHead>Total</TableHead>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
-                
-                <p className="mt-4 text-sm text-red-600">
-                  Entre em contato com nossa equipe de atendimento para regularizar sua situação.
-                </p>
-              </CardContent>
-            </Card>
-          )}
-        </>
+                      </TableHeader>
+                      <TableBody>
+                        {parcelasAtrasadas.map(parcela => (
+                          <TableRow key={parcela.id}>
+                            <TableCell>{parcela.numeroParcela}</TableCell>
+                            <TableCell>
+                              {new Date(parcela.dataVencimento).toLocaleDateString('pt-BR')}
+                            </TableCell>
+                            <TableCell>{formatCurrency(parcela.valorParcela)}</TableCell>
+                            <TableCell>
+                              {parcela.lateFee 
+                                ? formatCurrency(parcela.multa)
+                                : '-'}
+                            </TableCell>
+                            <TableCell className="font-medium">
+                              {formatCurrency((parcela.valorParcela + (parcela.multa || 0)))}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                  
+                  <p className="mt-4 text-sm text-red-600">
+                    Entre em contato com nossa equipe de atendimento para regularizar sua situação.
+                  </p>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        </div>
       );
     } else {
       // Admin dashboard
@@ -353,9 +353,6 @@ const Dashboard = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                {/* <div className="text-2xl font-bold text-red-600">
-                  {dashboardStats.totalLateemprestimos}
-                </div> */}
               </CardContent>
             </Card>
           </div>
@@ -463,10 +460,12 @@ const Dashboard = () => {
   };
 
   return (
-    <>
-      <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
-      {renderContent()}
-    </>
+    <div className=''>
+      <div className='p-4'>
+        <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
+        {renderContent()}
+      </div>
+    </div>
   );
 };
 

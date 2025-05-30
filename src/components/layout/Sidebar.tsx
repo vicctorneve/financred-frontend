@@ -22,10 +22,9 @@ export const Sidebar = () => {
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
 
-  console.log(user)
 
-  // Define menu items based on user role
-  const getMenuItems = () => {
+  const getMenuItems = () => { 
+    console.log(user?.name)
     const items = [
       {
         title: 'Dashboard',
@@ -35,7 +34,6 @@ export const Sidebar = () => {
       },
     ];
 
-    // Admin and cliente can access clients, loans, payments and
     if (['ROLE_CLIENTE', 'ROLE_ADMIN'].includes(user?.role || '')) {
       items.push(
         {
@@ -60,7 +58,6 @@ export const Sidebar = () => {
     }
 
 
-    // Admin only settings
     if (user?.role === 'ROLE_ADMIN') {
       items.push({
         title: 'Configuração',
