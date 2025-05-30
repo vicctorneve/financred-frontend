@@ -1,0 +1,111 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 40% 98%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 265 83.2% 63.3%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 265 67% 90%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 265 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 265 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 265 31.8% 91.4%;
+    --input: 265 31.8% 91.4%;
+    --ring: 265 84% 64.9%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 265 83.2% 63.3%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 210 40% 98%;
+    --sidebar-primary-foreground: 265 83.2% 63.3%;
+    --sidebar-accent: 267.2 32.6% 27.5%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 265 31.8% 91.4%;
+    --sidebar-ring: 267.2 91.2% 69.8%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 265 83.2% 63.3%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 267.2 32.6% 27.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 267.2 32.6% 27.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 267.2 32.6% 27.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 267.2 32.6% 27.5%;
+    --input: 267.2 32.6% 27.5%;
+    --ring: 265 70% 70%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading;
+  }
+}
+
+@layer components {
+  .status-badge {
+    @apply px-2 py-1 rounded-full text-xs font-medium;
+  }
+  
+  .status-active {
+    @apply bg-finly-success bg-opacity-20 text-finly-success;
+  }
+  
+  .status-paid {
+    @apply bg-finly-success bg-opacity-20 text-finly-success;
+  }
+  
+  .status-late {
+    @apply bg-finly-danger bg-opacity-20 text-finly-danger;
+  }
+}
