@@ -14,30 +14,40 @@ const useEmprestimoStatus = (
 
   useEffect(() => {
     const socket = new SockJS(`http://localhost:8080/api/v1/ws?token=${user.token}`);
-    
+
+    socket.onerror = (error) => {
+      console.error('❌ Erro no WebSocket:', error);
+    };
+
     const client = new Client({
       webSocketFactory: () => socket,
       reconnectDelay: 5000,
+      debug: (str) => {
+        console.log('[STOMP DEBUG]', str);
+      },
       onConnect: () => {
-        console.log('✅ Conectado ao WebSocket');
-
         client.subscribe(`/topic/status-emprestimo/${idCliente}`, (message) => {
-          const body: StatusUpdate = JSON.parse(message.body);
-          console.log('📥 Status recebido:', body);
-          onStatusUpdate(body);
+          try {
+            const body: StatusUpdate = JSON.parse(message.body);
+            console.log(body)
+            onStatusUpdate(body);
+          } catch (error) {
+            console.error('❌ Erro ao processar mensagem:', error);
+          }
         });
-      }, 
+      },
       onStompError: (frame) => {
         console.error('❌ Erro STOMP:', frame.headers['message']);
       },
     });
-    
+
     client.activate();
     clientRef.current = client;
 
     return () => {
-      client.deactivate();
-      console.log('🔌 Desconectado do WebSocket');
+      if (clientRef.current) {
+        clientRef.current.deactivate();
+      }
     };
   }, [idCliente, onStatusUpdate, user.token]);
 };
