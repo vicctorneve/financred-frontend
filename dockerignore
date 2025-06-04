@@ -1,0 +1,7 @@
+node_modules
+.git
+*.log
+docker-compose.override.yml
+Dockerfile.dev
+build
+dist
