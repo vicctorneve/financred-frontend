@@ -35,21 +35,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         setIsLoading(false);  
         return;
       }
-      // api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      
-      // const response = await api.get<ApiResponse<User>>('/auth/login');
-      // if (response.status == 200) {
-      //   setUser(response.data || null);
-      // } else {
-      //   localStorage.removeItem('token');
-      //   setUser(null); 
-      // }
+
     } catch (error) {
-      console.error('Authentication error:', error);
+      console.error('Erro de autenticação:', error);
       localStorage.removeItem('token');
       setUser(null);
       toast({
-        title: "Authentication Error",
+        title: "Erro de autenticação",
         description: "Your session has expired. Please login again.",
         variant: "destructive",
       });
@@ -72,24 +64,23 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         api.defaults.headers.common['Authorization'] = `Bearer ${userData.token}`;
         setUser(userData as User);
         setUser(prev => ({ ...prev, cpf: credentials.cpf }));
-        setUser(prev => ({ ...prev, name: credentials.name }));
         
         toast({
           title: "Logado com sucesso",
-          description: `Seja bem-vindo, ${userData.name}!`,
+          description: `Seja bem-vindo, ${userData.nome}!`,
         });
       } else {
         toast({
-          title: "Login failed",
-          description: response.data.error || "Invalid credentials",
+          title: "Login falhou.",
+          description: response.data.error || "Credenciais invalida!",
           variant: "destructive",
         });
       }
     } catch (error) {
       console.error('Login error:', error);
       toast({
-        title: "Login failed",
-        description: "An error occurred during login. Please try again.",
+        title: "Login falhou!",
+        description: "Ocorreu um erro durante o login. Tente novamente.",
         variant: "destructive",
       });
     } finally {
@@ -102,8 +93,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     api.defaults.headers.common['Authorization'] = '';
     setUser(null);
     toast({
-      title: "Logout successful",
-      description: "You have been logged out successfully.",
+      title: "Logout bem-sucedido",
+      description: "Você foi desconectado com sucesso.",
     });
   };
 

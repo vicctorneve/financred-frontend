@@ -34,23 +34,24 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/unauthorized" element={<UnauthorizedPage />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/client/register" element={<ClientRegisterFormPage />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/unauthorized" element={<UnauthorizedPage />} />
-            
-            <Route path="/clientes" element={<ClientsPage />} />
-            <Route path="/clients/new" element={<ClientFormPage />} />
-            <Route path="/clients/:id" element={<ClientDetailsPage />} />
-            <Route path="/clients/:id/edit" element={<ClientFormPage />} />
             
             <Route path="/emprestimos" element={<LoansPage />} />
             <Route path="/emprestimos/novo" element={<LoanFormPage />} />
             <Route path="/emprestimo/:id" element={<LoanDetailsPage />} />
             <Route path="/emprestimo/simulacao" element={<LoanSimulationPage />} />
-            
+
             <Route path="/pagamentos" element={<PaymentsPage />} />
+            
+            <Route path="/clientes" element={<ClientsPage />} />
+            <Route path="/clients/:id" element={<ClientDetailsPage />} />
+            <Route path="/clients/:id/edit" element={<ClientFormPage />} />
+            
+            
                         
             <Route path="*" element={<NotFoundPage />} />
           </Routes>

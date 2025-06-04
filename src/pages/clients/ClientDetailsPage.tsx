@@ -90,12 +90,6 @@ const ClientDetailsPage = () => {
               Editar
             </Link>
           </Button>
-          <Button asChild>
-            <Link to="/emprestimos/novo" state={{ client }}>
-              <FileText className="h-4 w-4 mr-2" />
-              Novo Empréstimo
-            </Link>
-          </Button>
         </div>
       </div>
       

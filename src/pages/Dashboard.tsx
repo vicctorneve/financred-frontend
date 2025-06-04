@@ -57,7 +57,7 @@ const Dashboard = () => {
     enabled: isAdmin
   });
 
-  const rotaApiCliente = user.role == "ROLE_ADMIN" ? "clientes" : `/me`
+  const rotaApiCliente = user.role == "ROLE_ADMIN" ? "clientes" : `clientes/me`
 
   
   const { data: clientData, isLoading: isLoadingClient } = useQuery({
@@ -112,7 +112,7 @@ const Dashboard = () => {
       if (!client) { 
         return (
           <div className="text-center py-8">
-            <p className="text-xl mb-4">Bem-vindo, {user.name}!</p>
+            <p className="text-xl mb-4">Bem-vindo, {user.nome}!</p>
             <p>Seus dados de cliente não foram encontrados no sistema.</p>
             <p className="mt-2">Entre em contato com o suporte para mais informações.</p>
           </div>
@@ -281,7 +281,6 @@ const Dashboard = () => {
         </div>
       );
     } else {
-      // Admin dashboard
       if (isLoading) {
         return (
           <div className="flex justify-center items-center p-8">
@@ -349,10 +348,13 @@ const Dashboard = () => {
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-muted-foreground">
-                  Empréstimos em Atraso
+                  Total de parcelas em Atraso
                 </CardTitle>
               </CardHeader>
               <CardContent>
+                 <div className="text-2xl font-bold text-red-500">
+                  {formatCurrency(dashboardStats.valorTotalEmprestimosAtrasados)}
+                </div>
               </CardContent>
             </Card>
           </div>

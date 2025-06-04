@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -60,7 +59,7 @@ const ClientRegisterFormPage = () => {
   const form = useForm<FormValues>({ 
     resolver: zodResolver(formSchema),
     defaultValues: {
-      nomeCompleto: user.name,
+      nomeCompleto: user.nome,
       cpf: user.cpf,
       email: user.email,
       telefone: '',
@@ -87,7 +86,6 @@ const ClientRegisterFormPage = () => {
     },
   });
   
-  // Fetch client data if editing
   const { isLoading } = useQuery({
     queryKey: ['client', id],
     queryFn: async () => {

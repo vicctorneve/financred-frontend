@@ -3,7 +3,7 @@ export type UserRole = 'ROLE_ADMIN' | 'ROLE_CLIENTE';
 
 export interface User {
   idCliente: string;
-  name: string;
+  nome: string;
   email: string;
   cpf: string;
   data_nascimento: string;
@@ -115,16 +115,12 @@ export interface Pagamentos {
 }
 
 export interface LoanSimulation {
-  amount: number;
-  interestRate: number;
-  term: number;
-  installmentAmount: number;
-  totalAmount: number;
-  payments: {
-    installmentNumber: number;
-    dueDate: string;
-    amount: number;
-  }[];
+  totalComJuros: number;
+  valorSolicitado: number;
+  numeroParcelas: number;
+  valorParcela: number;
+  dataInicio: string;
+  tipoEmprestimo: string;
 }
 
 export interface LoginCredentials {

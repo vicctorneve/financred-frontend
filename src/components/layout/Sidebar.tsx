@@ -24,7 +24,6 @@ export const Sidebar = () => {
 
 
   const getMenuItems = () => { 
-    console.log(user?.name)
     const items = [
       {
         title: 'Dashboard',
@@ -71,8 +70,8 @@ export const Sidebar = () => {
   };
 
   const menuItems = getMenuItems();
-  const userInitials = user?.name
-    ? user.name
+  const userInitials = user?.nome
+    ? user.nome
         .split(' ')
         .map((n) => n[0])
         .join('')
@@ -141,19 +140,21 @@ export const Sidebar = () => {
       </nav>
 
       <div className="p-4 border-t border-sidebar-border">
-        <div className="flex items-center">
-          <Avatar className="h-8 w-8">
-            <AvatarFallback className="bg-sidebar-accent text-sidebar-accent-foreground">
-              {userInitials}
-            </AvatarFallback>
-          </Avatar>
-          {!collapsed && (
-            <div className="ml-3 overflow-hidden">
-              <p className="text-sm font-medium truncate">{user?.name}</p>
+        <Link to={`/clients/${user.idCliente}/edit`}>
+          <div className="flex items-center cursor-pointer">
+            <Avatar className="h-8 w-8 cursor-pointer">
+              <AvatarFallback className="bg-sidebar-accent text-sidebar-accent-foreground">
+                {userInitials}
+              </AvatarFallback>
+            </Avatar>
+            {!collapsed && (
+              <div className="ml-3 overflow-hidden">
+                <p className="text-sm font-medium truncate">{user?.nome}</p>
 
-            </div>
-          )}
-        </div>
+              </div>
+            )}
+          </div>
+        </Link>
         <Link
         to={"/login"}>
           <Button

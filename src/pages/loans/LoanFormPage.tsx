@@ -120,36 +120,6 @@ const LoanFormPage = () => {
               <CardTitle>Detalhes do Empréstimo</CardTitle>
             </CardHeader>
             <CardContent className="grid gap-4 md:grid-cols-2">
-              
-              {user?.role === "ROLE_ADMIN" && (
-                <FormField
-                  control={form.control}
-                  name="idCliente"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Cliente</FormLabel>
-                      <Select
-                        value={field.value ? String(field.value) : ''}
-                        onValueChange={(value) => field.onChange(Number(value))}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Selecione um cliente" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {optionsClientes.map((option) => (
-                            <SelectItem key={option.value} value={String(option.value)}>
-                              {option.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              )}
 
               <FormField
                   control={form.control}

@@ -39,15 +39,12 @@ const ClientsPage = () => {
     }
   });
 
+  
   const filteredClients = data?.filter((client: Client) => 
-    // client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    // client.cpf.includes(searchTerm) ||
-    // client.data_nascimento ||
-    // client.renda_mensal ||
-    // client.score ||
-    // client.email.toLowerCase().includes(searchTerm.toLowerCase())
-    data
-  ) || [];
+    client.nomeCompleto.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    client.cpf.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    client.email.toLowerCase().includes(searchTerm.toLowerCase()) 
+) || [];
 
   return (
     <AppLayout requiredRole="ROLE_CLIENTE">
@@ -56,9 +53,10 @@ const ClientsPage = () => {
       </div>
       
       <div className="relative mb-6">
-        <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+        <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground pointer-events-none" />
         <Input
           placeholder="Buscar por nome, CPF ou email"
+          aria-label="Buscar por nome, CPF ou email"
           className="pl-8"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}

@@ -44,7 +44,6 @@ const LoansPage = () => {
     }
   });
 
-  // Sempre que data mudar, atualiza loans
   useEffect(() => {
     if (data) {
       setLoans(data);
@@ -77,14 +76,22 @@ const LoansPage = () => {
     <AppLayout requiredRole="ROLE_CLIENTE">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Empréstimos</h1>
-        <div className="flex space-x-2"> 
-          <Button asChild>
-            <Link to="/emprestimos/novo">
-              <FileText className="h-4 w-4 mr-2" />
-              Novo Empréstimo
-            </Link>
-          </Button>
-        </div>
+        {user.role == 'ROLE_CLIENTE' && (
+          <div className="flex space-x-2"> 
+            <Button asChild className='bg-purple-600'>
+              <Link to="/emprestimo/simulacao">
+                <FileText className="h-4 w-4 mr-2" />
+                Simular Empréstimo
+              </Link>
+            </Button>
+            <Button asChild>
+              <Link to="/emprestimos/novo">
+                <FileText className="h-4 w-4 mr-2" />
+                Novo Empréstimo
+              </Link>
+            </Button>
+          </div>
+        )}
       </div>
       
       <div className="flex justify-end flex-col md:flex-row gap-4 mb-6">
