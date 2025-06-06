@@ -90,7 +90,7 @@ const ClientFormPage = () => {
     },
   });
 
-  const rotaApiCliente = user.role == "ROLE_ADMIN" ?  `/clientes/${id}` : `/me`;
+  const rotaApiCliente = user.role == "ROLE_ADMIN" ?  `/clientes/${id}` : `clientes/me`;
   
   const { isLoading } = useQuery({
     queryKey: ['client', id],
@@ -103,6 +103,7 @@ const ClientFormPage = () => {
           }   
         }  
       ); 
+      console.log(response)
     const data = response.data;
 
     
@@ -153,7 +154,7 @@ const ClientFormPage = () => {
       toast.error('Erro ao criar cliente. Tente novamente.');
     },
   });
-  const rotaAtualizarDadosCliente = user.role == "ROLE_ADMIN" ? `/clientes/${id}` : `cliente/me`
+  const rotaAtualizarDadosCliente = user.role == "ROLE_ADMIN" ? `/clientes/${id}` : `clientes/me`
   
   const updateMutation = useMutation({
     mutationFn: async (data: FormValues) => {
@@ -172,7 +173,7 @@ const ClientFormPage = () => {
       queryClient.invalidateQueries({ queryKey: ['client', id] });
       queryClient.invalidateQueries({ queryKey: ['clients'] });
       toast.success('Cliente atualizado com sucesso!');
-      navigate(`/clients/${id}`);
+      navigate(user.role == "ROLE_ADMIN" ? `/clients/${id}` : `/emprestimos`);
     },
     onError: () => {
       toast.error('Erro ao atualizar cliente. Tente novamente.');
@@ -496,12 +497,13 @@ const ClientFormPage = () => {
                 />
               </CardContent>
             </Card>
+
             
             <div className="flex justify-end space-x-2">
               <Button 
                 type="button" 
                 variant="outline" 
-                onClick={() => navigate('/clientes')}
+                onClick={() => navigate(user.role == "ROLE_ADMIN" ? `/clientes` : `/emprestimos`)}
               >
                 Cancelar
               </Button>
