@@ -153,7 +153,7 @@ const ClientFormPage = () => {
       toast.error('Erro ao criar cliente. Tente novamente.');
     },
   });
-  const rotaAtualizarDadosCliente = user.role == "ROLE_ADMIN" ? `/clientes/${id}` : `/me`
+  const rotaAtualizarDadosCliente = user.role == "ROLE_ADMIN" ? `/clientes/${id}` : `cliente/me`
   
   const updateMutation = useMutation({
     mutationFn: async (data: FormValues) => {
