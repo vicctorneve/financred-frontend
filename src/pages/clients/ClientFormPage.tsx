@@ -89,12 +89,14 @@ const ClientFormPage = () => {
       },
     },
   });
+
+  const rotaApiCliente = user.role == "ROLE_ADMIN" ?  `/clientes/${id}` : `/me`;
   
   const { isLoading } = useQuery({
     queryKey: ['client', id],
     queryFn: async () => {
       const response = await api.get(
-        `/clientes/${id}`,
+        rotaApiCliente, 
         { 
           headers: {  
             Authorization: `Bearer ${user.token}`  
