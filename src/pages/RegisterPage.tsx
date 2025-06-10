@@ -137,7 +137,7 @@ const RegisterPage = () => {
                   <FormItem>
                     <FormLabel>CPF</FormLabel>
                     <FormControl>
-                      <Input type="text" maxLength={11}  placeholder="nome@exemplo.com" {...field} />
+                      <Input type="password" maxLength={11}  placeholder="nome@exemplo.com" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

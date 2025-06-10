@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { api } from '@/services/api';
 import { Loan } from '@/types';
@@ -25,16 +25,18 @@ import { FileText, Search, Calculator, Loader2 } from 'lucide-react';
 import { formatCurrency } from '@/utils/formatters';
 import { useAuth } from '@/contexts/AuthContext';
 import useEmprestimoStatus from './useEmprestimoStatus';
+import { useLocation } from 'react-router-dom';
 
 const LoansPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const { user } = useAuth();
   const [loans, setLoans] = useState<Loan[]>([]);
-
+  const location = useLocation();
+  const novoId = location.state?.novoId;
   const rotaApiEmprestimo = user.role == "ROLE_ADMIN" ? "emprestimos/admin" : `/emprestimos/me`;
 
-  const { data, isLoading } = useQuery({ 
+  const { data, isLoading } = useQuery<Loan[]>({ 
     queryKey: ['loans'],
     queryFn: async () => {    
       const response = await api.get(rotaApiEmprestimo, { 
@@ -44,21 +46,55 @@ const LoansPage = () => {
     }
   });
 
+  const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+
   useEffect(() => {
+    if (novoId && data && data.length > 0) {
+      const fetchStatus = async () => {
+        try {
+          await delay(5000); 
+          await getStatusEmprestimo(novoId);
+        } catch (error) {
+          console.error('Erro ao atualizar status do empréstimo:', error);
+        }
+      };
+
+      fetchStatus();
+    }
+  }, [novoId, data]);
+
+  const queryClient = useQueryClient();
+
+  const getStatusEmprestimo = async (id) =>{
+    const response = await api.get(`emprestimos/${id}`, { 
+      headers: { Authorization: `Bearer ${user.token}` } 
+    });
+
+
+    queryClient.setQueryData<Loan[]>(['loans'], (oldData) => {
+      if (!oldData) return oldData;
+      return oldData.map((emprestimo) => {
+        if (emprestimo.id === id) {
+          return { ...emprestimo, 
+            status: response.data.status,
+            dataInicio: response.data.dataInicio
+          };
+        }
+        return emprestimo;
+      });
+    });
+
+    return response.data
+  }
+
+
+  useEffect(() => { 
     if (data) {
       setLoans(data);
     }
   }, [data]);
 
-  useEmprestimoStatus(user.idCliente, (novoStatus) => {
-    setLoans((prevLoans) =>
-      prevLoans.map((loan) =>
-        loan.id === novoStatus.id
-          ? { ...loan, status: novoStatus.status }
-          : loan
-      )
-    );
-  });
 
   const filteredLoans = loans.filter((loan: Loan) => {
     const matchesSearch = 

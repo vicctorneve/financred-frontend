@@ -93,9 +93,10 @@ const LoanFormPage = () => {
       const response = await api.post(`/emprestimos`, data, { 
         headers: { Authorization: `Bearer ${user.token}` }
       });
-      if (response.status == 201) {
+      if (response.status == 200) {
         toast.success("Empréstimo criado com sucesso!");
-        navigate('/emprestimos');
+        console.log(response.data.id)
+        navigate('/emprestimos', { state: {novoId: response.data.id}});
       }
       return response.data;
     }, 
