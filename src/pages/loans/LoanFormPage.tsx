@@ -95,7 +95,6 @@ const LoanFormPage = () => {
       });
       if (response.status == 200) {
         toast.success("Empréstimo criado com sucesso!");
-        console.log(response.data.id)
         navigate('/emprestimos', { state: {novoId: response.data.id}});
       }
       return response.data;

@@ -148,12 +148,14 @@ const LoanDetailsPage = () => {
       <CardHeader>
         <div className="flex justify-between items-center mb-6">
           <CardTitle>Detalhes do Empréstimo</CardTitle>
-          <Button 
-            className="hover:bg-white cursor-pointer text-white bg-purple-400"
-            asChild
-          >
-            <p onClick={pagarEmprestimo}>Quitar Empréstimo</p>
-          </Button>
+          {user.role == 'ROLE_CLIENTE' && (
+            <Button 
+              className="hover:bg-white cursor-pointer text-white bg-purple-400"
+              asChild
+            >
+              <p onClick={pagarEmprestimo}>Quitar Empréstimo</p>
+            </Button>
+          )}
         </div>
       </CardHeader>
 
@@ -193,17 +195,19 @@ const LoanDetailsPage = () => {
                   <TableCell>{dadosParcela.diasAtraso}</TableCell>
                   <TableCell>{dadosParcela.valorJuros}</TableCell>
                   <TableCell>{dadosParcela.observacao}</TableCell>
-                  <TableCell className="text-right">
-                    <Button 
-                      variant="ghost"
-                      size="sm"
-                      asChild
-                      id={dadosParcela.id}
-                      className="hover:bg-white cursor-pointer text-white bg-purple-400"
-                    >
-                      <p data-id={dadosParcela.dataVencimento} onClick={pagarParcela}>Pagar</p>
-                    </Button>
-                  </TableCell>
+                  {user.role == 'ROLE_CLIENTE' && (
+                    <TableCell className="text-right">
+                      <Button 
+                        variant="ghost"
+                        size="sm"
+                        asChild
+                        id={dadosParcela.id}
+                        className="hover:bg-white cursor-pointer text-white bg-purple-400"
+                      >
+                        <p data-id={dadosParcela.dataVencimento} onClick={pagarParcela}>Pagar</p>
+                      </Button>
+                    </TableCell>
+                  )}
                 </TableRow>
               ))
             )}

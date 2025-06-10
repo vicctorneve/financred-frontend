@@ -36,6 +36,7 @@ const ClientDetailsPage = () => {
           }   
         } 
       );   
+
       return response.data;
     }
   });
@@ -44,7 +45,7 @@ const ClientDetailsPage = () => {
     queryKey: ['client-loans', id],
     queryFn: async () => {
       const response = await api.get(
-        `/emprestimos/${id}`,
+        `/emprestimos/cliente/${id}`,
         {  
           headers: {  
             Authorization: `Bearer ${user.token}`  
@@ -109,7 +110,7 @@ const ClientDetailsPage = () => {
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Telefone</p>
-              <p>{client.phone}</p>
+              <p>{client.telefone}</p>
             </div>
             <Separator />
             {client.cidade && (

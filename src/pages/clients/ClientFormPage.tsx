@@ -103,7 +103,6 @@ const ClientFormPage = () => {
           }   
         }  
       ); 
-      console.log(response)
     const data = response.data;
 
     
