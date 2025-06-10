@@ -24,7 +24,6 @@ import {
 import { FileText, Search, Calculator, Loader2 } from 'lucide-react';
 import { formatCurrency } from '@/utils/formatters';
 import { useAuth } from '@/contexts/AuthContext';
-import useEmprestimoStatus from './useEmprestimoStatus';
 import { useLocation } from 'react-router-dom';
 
 const LoansPage = () => {
